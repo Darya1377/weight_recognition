@@ -3,11 +3,8 @@ import torch
 
 def main():
 
+    model = YOLO("yolo11s.pt") 
 
-    # Load a model
-    model = YOLO("yolo11s.pt")  # load a pretrained model (recommended for training)
-
-    # Train the model
     results = model.train(data=r"C:\Users\user\Desktop\weight_recognition\data.yaml",
                             epochs=100, 
                             imgsz=640, 
@@ -22,12 +19,6 @@ def main():
                             # erasing=0.0,
                             # auto_augment=None,
                             )
-    # Load a modelp
-    # model = YOLO("yolo11s-seg.pt")  # load a pretrained model (recommended for training)
-
-
-    # # Train the model
-    # results = model.train(data="data.yaml", epochs=100, imgsz=640, device=0, batch=8)
 
 if __name__ == '__main__':
     with torch.no_grad():
