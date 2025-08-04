@@ -1,22 +1,6 @@
-# train: C:\Users\user\Desktop\yolo\people\train
-# val: C:\Users\user\Desktop\yolo\people\train
-
-# nc: 3
-
-# names: [Nadezhdina Daria, Johny Depp, Angelina Jolie]
-
-
-
 train: C:\Users\user\Desktop\weight_recognition\weight_digits\train
 val: C:\Users\user\Desktop\weight_recognition\weight_digits\val
 
 nc: 10
 
 names: ['0','1','2','3','4','5','6','7','8','9']
-
-# train: C:\Users\user\Desktop\yolo\cow_birth\cow_birth_segmentation\train
-# val: C:\Users\user\Desktop\yolo\cow_birth\cow_birth_segmentation\val
-
-# nc: 3
-
-# names: ['birth', 'not birth', 'calf']
