@@ -24,24 +24,19 @@ def most_common_length(strings):
 
 start_time = time.time()
 
-# Load your YOLOv8 model
 model = YOLO(r"C:\Users\user\Desktop\weight_recognition\runs\detect\train3\weights\best.pt")  # replace with your model path
 
-# Open video file
 video_path = r"C:\Users\user\Desktop\weight_recognition\recordings\recording_20250617_073150.mp4" # replace with your video path
 cap = cv2.VideoCapture(video_path)
 
-# Get video properties for the output writer
 frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = int(cap.get(cv2.CAP_PROP_FPS))
 
-# Define the codec and create VideoWriter object
 output_path = "output_video_weight3.mp4"
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # or use 'avc1' for H.264
+fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
 out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 
-# Define text display properties
 font = cv2.FONT_HERSHEY_SIMPLEX 
 font_scale = 0.7
 font_thickness = 2
@@ -58,43 +53,32 @@ with open(csv_filename, mode='a', newline='', encoding='utf-8') as csvfile:
     
     if not file_exists:
         writer.writeheader()
-    # Loop through the video frames
+        
     while cap.isOpened():
-        # Read a frame from the video
         success, frame = cap.read()
         
         if success:
-            # Run YOLOv8 inference on the frame
             results = model(frame, conf = 0.65)
             
-            # Get the first result (assuming single image inference)
             result = results[0]
             
-            # Get bounding boxes, classes, and names
             boxes = result.boxes.xyxy.cpu().numpy()  # x1, y1, x2, y2
             classes = result.boxes.cls.cpu().numpy()
             class_names = result.names
             
-            # Combine boxes with their class names and sort from left to right
             detections = []
             for box, cls in zip(boxes, classes):
                 x1 = box[0]  # left coordinate
                 class_name = class_names[int(cls)]
                 detections.append((x1, class_name))
             
-            # Sort detections by x-coordinate (left to right)
             detections.sort(key=lambda x: x[0])
-            
-            # Extract just the class names in order
+
             sorted_class_names = [name for (x1, name) in detections]
-            
-            # Concatenate into a single string
+
             class_string = " ".join(sorted_class_names)
             weight = class_string.replace(' ', '')
-            # Print the result for this frame to terminal
             
-            
-            # Get the annotated frame with bounding boxes
             annotated_frame = results[0].plot()
             # if len(weight)==1 or len(weight)==5:
             #     print(weight)
@@ -158,23 +142,16 @@ with open(csv_filename, mode='a', newline='', encoding='utf-8') as csvfile:
                 avg = 0
                 start_time = time.time()
                 weight_all = []
-                    
 
-            # break  # Exit the loop or perform an action
-            # Write the frame to the output video
             out.write(annotated_frame)
             
-            # Display the annotated frame
-            cv2.imshow("YOLOv8 Inference", annotated_frame)
-            
-            # Break the loop if 'q' is pressed
+            cv2.imshow("YOLO Inference", annotated_frame)
+
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
         else:
-            # Break the loop if the end of the video is reached
             break
 
-# Release resources
 cap.release()
 out.release()
 cv2.destroyAllWindows()
